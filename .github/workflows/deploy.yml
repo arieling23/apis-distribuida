@@ -12,7 +12,7 @@ jobs:
     - name: Clonar repositorio
       uses: actions/checkout@v3
 
-    - name: Configurar Docker
+    - name: Verificar versión de Docker
       run: docker --version
 
     - name: Autenticarse en Docker Hub
@@ -20,7 +20,7 @@ jobs:
 
     - name: Construir imagen del backend
       run: |
-        cd backend
+        cd backend-api
         docker build -t arieling/backend-api .
 
     - name: Publicar imagen del backend
@@ -28,7 +28,7 @@ jobs:
 
     - name: Construir imagen del frontend
       run: |
-        cd frontend
+        cd frontend-api
         docker build -t arieling/frontend-api .
 
     - name: Publicar imagen del frontend
@@ -47,3 +47,4 @@ jobs:
           docker stop frontend || true && docker rm frontend || true
           docker run -d --name backend -p 3000:3000 arieling/backend-api
           docker run -d --name frontend -p 3001:3000 arieling/frontend-api
+
