@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 
 const apis = [
-  "https://pokeapi.co/api/v2/pokemon/1",
+  
   "https://jsonplaceholder.typicode.com/posts/1",
   "https://goweather.herokuapp.com/weather/London",
   "https://dog.ceo/api/breeds/image/random"
