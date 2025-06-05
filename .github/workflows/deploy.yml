@@ -1,0 +1,49 @@
+name: Deploy Frontend y Backend
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clonar repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Docker
+      run: docker --version
+
+    - name: Autenticarse en Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Construir imagen del backend
+      run: |
+        cd backend
+        docker build -t arieling/backend-api .
+
+    - name: Publicar imagen del backend
+      run: docker push arieling/backend-api
+
+    - name: Construir imagen del frontend
+      run: |
+        cd frontend
+        docker build -t arieling/frontend-api .
+
+    - name: Publicar imagen del frontend
+      run: docker push arieling/frontend-api
+
+    - name: Desplegar en EC2
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          docker pull arieling/backend-api
+          docker pull arieling/frontend-api
+          docker stop backend || true && docker rm backend || true
+          docker stop frontend || true && docker rm frontend || true
+          docker run -d --name backend -p 3000:3000 arieling/backend-api
+          docker run -d --name frontend -p 3001:3000 arieling/frontend-api
