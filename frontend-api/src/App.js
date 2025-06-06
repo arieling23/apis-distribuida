@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", padding: 20 }}>
-      <h1 style={{ textAlign: "center" }}>🧠 Resultados Visuales de las 4 APIs</h1>
+      <h1 style={{ textAlign: "center" }}>🧠 Resultados Visuales de las 3 APIs</h1>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "center" }}>
         {results.map((item, i) => (
